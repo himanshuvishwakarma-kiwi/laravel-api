@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  blog-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: blog-app
+    restart: always
+    volumes:
+      - ./:/var/www/html
+      - ./storage:/var/www/html/storage
+    networks:
+      - blog-network
+
+  blog-webserver:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: blog-webserver
+    restart: always
+    volumes:
+      - ./public:/var/www/html/public
+    ports:
+      - "8085:80"
+    depends_on:
+      - blog-app
+    networks: 
+      - blog-network
+
+networks:
+  blog-network:
+    driver: bridge
