@@ -23,7 +23,7 @@ use App\Http\Controllers\Api\ForgetPasswordController;
 Route::post('register', [UserController::class, 'register']);
 Route::post('login', [UserController::class, 'login']);
 Route::post('forgot-password', [ForgetPasswordController::class, 'sendPasswordResetLink']);
-
+Route::post('reset-password/{token}', [ForgetPasswordController::class, 'resetPassword'])->name('password.reset');
 Route::group(['middleware' => ['jwt.verify']], function() {
     Route::post('logout', [UserController::class, 'logout']);
     Route::get('profile', [UserController::class, 'getUser']);
