@@ -15,20 +15,20 @@ class UserRepository implements UserRepositoryInterface
     {
         $this->model = $model;
     }
-    // public function getAllUsers() 
-    // {
-    //     return User::all();
-    // }
+    public function getAllUsers() 
+    {
+        return User::all();
+    }
 
-    // public function getUserById($userId) 
-    // {
-    //     return User::findOrFail($userId);
-    // }
+    public function getUserById($userId) 
+    {
+        return User::find($userId);
+    }
 
-    // public function deleteUser($userId) 
-    // {
-    //     User::destroy($userId);
-    // }
+    public function deleteUser($userId) 
+    {
+        User::destroy($userId);
+    }
 
     public function createUser(array $userDetails) 
     {
@@ -38,8 +38,8 @@ class UserRepository implements UserRepositoryInterface
     {
         return $this->model;
     }
-    // public function updateUser($userId, array $newDetails) 
-    // {
-    //     return User::whereId($userId)->update($newDetails);
-    // }
+    public function updateUser($userId, array $newDetails) 
+    {
+        return User::whereId($userId)->update($newDetails);
+    }
 }
