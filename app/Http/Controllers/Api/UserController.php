@@ -19,6 +19,55 @@ class UserController extends Controller
         $this->userRepository = $userRepository;
     }
 
+    /**
+    * @OA\Post(
+    * path="/api/register",
+    * operationId="Register",
+    * tags={"User"},
+    * summary="Sign Up",
+    * description="User Register here",
+    *     @OA\RequestBody(
+    *         @OA\JsonContent(
+    *            required={"first_name","last_name","email","phone","password","confirm_password"},
+    *            @OA\Property(property="first_name", type="string"),
+    *            @OA\Property(property="last_name", type="text"),
+    *            @OA\Property(property="email", type="string", format="email"),
+    *            @OA\Property(property="phone", type="string"),
+    *            @OA\Property(property="password", type="string", format="password"),
+    *            @OA\Property(property="confirm_password", type="string", format="password"),
+    *         ),
+    *         @OA\MediaType(
+    *            mediaType="multipart/form-data",
+    *            @OA\Schema(
+    *               type="object",
+    *               required={"first_name","last_name","email","phone","password", "confirm_password"},
+    *               @OA\Property(property="first_name", type="text"),
+    *               @OA\Property(property="last_name", type="text"),
+    *               @OA\Property(property="email", type="text"),
+    *               @OA\Property(property="phone", type="text"),
+    *               @OA\Property(property="password", type="password"),
+    *               @OA\Property(property="confirm_password", type="password")
+    *            ),
+    *        ),
+    *    ),
+    *   @OA\Response(
+    *       response=200,
+    *       description="Success",
+    *   ),
+    *   @OA\Response(
+    *       response=400,
+    *       description="Invalid request",
+    *   ),
+    *   @OA\Response(
+    *       response=404,
+    *       description="Not found",
+    *   ),
+    *   @OA\Response(
+    *       response=401,
+    *       description="Unauthorized",
+    *   ),
+    * )
+    */
     //function for creating new user
     public function register(Request $request){
         $validator = Validator::make($request->all(), [
@@ -47,7 +96,51 @@ class UserController extends Controller
             return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
+    //End
 
+    /**
+     * @OA\Post(
+     *  path="/api/login",
+     *  summary="Sign in",
+     *  description="Login by email, password",
+     *  operationId="Login",
+     *  tags={"User"},
+     *  @OA\RequestBody(
+     *    required=true,
+     *    description="User credentials",
+     *    @OA\JsonContent(
+     *       required={"email","password"},
+     *       @OA\Property(property="email", type="string", format="email", example="himanshu@yopmail.com"),
+     *       @OA\Property(property="password", type="string", format="password", example="12345678"),
+     *    ),
+     *    @OA\MediaType(
+     *       mediaType="multipart/form-data",
+     *       @OA\Schema(
+     *          type="object",
+     *          required={"email","password"},
+     *          @OA\Property(property="email", type="string", format="email"),
+     *          @OA\Property(property="password", type="string", format="password"),
+     *       ),
+     *    ),
+     *  ),
+     *  @OA\Response(
+     *      response=200,
+     *      description="Success",
+     *   ),
+     *   @OA\Response(
+     *       response=400,
+     *       description="Invalid request",
+     *   ),
+     *   @OA\Response(
+     *       response=404,
+     *       description="Not found",
+     *   ),
+     *   @OA\Response(
+     *      response=401,
+     *      description="Unauthorized",
+     *   ),
+     * )
+     */
     // function for login  
     public function login(Request $request){
         $userCredentials = $request->only('email','password');
@@ -70,13 +163,13 @@ class UserController extends Controller
                     return response()->json([
                         'success' => false,
                         'message' => 'Login credentials are invalid.',
-                    ], 400);
+                    ], Response::HTTP_BAD_REQUEST);
                 }
             }else{  
                 return response()->json([
                 	'success' => false,
                 	'message' => 'Email doesn\'t found in our database.',
-                ], 400);
+                ],Response::HTTP_NOT_FOUND);
             }
         } catch (JWTException $e) {
     	    return response()->json([
@@ -91,6 +184,34 @@ class UserController extends Controller
             'token' => $token,
         ]);
     }
+    //End
+
+    /**
+     * @OA\Get(
+     *  path="/api/profile",
+     *  summary="Get Profile",
+     *  description="User profile",
+     *  operationId="User Profile",
+     *  tags={"User"},
+     *  security={{"bearer_token":{}}},
+     *  @OA\Response(
+     *      response=200,
+     *      description="Success",
+     *   ),
+     *   @OA\Response(
+     *       response=400,
+     *       description="Invalid request",
+     *   ),
+     *   @OA\Response(
+     *       response=404,
+     *       description="Not found",
+     *   ),
+     *   @OA\Response(
+     *      response=401,
+     *      description="Unauthorized",
+     *   ),
+     * )
+     */
     // get profile
     public function getUser(Request $request){
         
@@ -100,6 +221,26 @@ class UserController extends Controller
     
         return response()->json(['user' => $user]);
     }
+    //End
+
+    /**
+     * @OA\Post(
+     *  path="/api/logout",
+     *  summary="Logout",
+     *  description="User Logout",
+     *  operationId="User Logout",
+     *  tags={"User"},
+     *  security={{"bearer_token":{}}},
+     *  @OA\Response(
+     *     response=200,
+     *     description="Success",
+     *  ),
+     *  @OA\Response(
+     *     response=401,
+     *     description="Unauthorized",
+     *  ),
+     * )
+     */
     //for logout
     public function logout(Request $request){
         $token = $request->bearerToken();
@@ -118,6 +259,59 @@ class UserController extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+    //End
+
+    /**
+    * @OA\Post(
+    *   path="/api/update-profile/{userId}",
+    *   tags={"User"},
+    *   summary="Update profile",
+    *   operationId="updateprofile",
+    *   security={{"bearer_token":{}}},
+    *   @OA\Parameter(
+    *       name="userId",
+    *       in="path",
+    *       required=true,
+    *       @OA\Schema(
+    *         type="string"
+    *       )
+    *  ),
+    *  @OA\RequestBody(
+    *      @OA\JsonContent(
+    *         required={"first_name","last_name","phone"},
+    *         @OA\Property(property="first_name", type="string"),
+    *         @OA\Property(property="last_name", type="text"),
+    *         @OA\Property(property="phone", type="string"),
+    *       ),
+    *       @OA\MediaType(
+    *         mediaType="multipart/form-data",
+    *         @OA\Schema(
+    *           type="object",
+    *           required={"first_name","last_name","phone"},
+    *           @OA\Property(property="first_name", type="text"),
+    *           @OA\Property(property="last_name", type="text"),
+    *           @OA\Property(property="phone", type="text"),
+    *          ),
+    *       ),
+    *    ),
+    *    @OA\Response(
+    *      response=200,
+    *      description="Success",
+    *   ),
+    *   @OA\Response(
+    *       response=400,
+    *       description="Invalid request",
+    *   ),
+    *   @OA\Response(
+    *       response=404,
+    *       description="Not found",
+    *   ),
+    *   @OA\Response(
+    *      response=401,
+    *      description="Unauthorized",
+    *   ),
+    * )
+    */
     //for user profile update
     public function profileUpdate(Request $request,$userId){
         //check valid user input
@@ -148,7 +342,41 @@ class UserController extends Controller
             ], Response::HTTP_NOT_FOUND);
         }
     }
+    //End
 
+    /**
+    * @OA\Post(
+    *    path="/api/delete/{userId}",
+    *    tags={"User"},
+    *    summary="Delete user",
+    *    operationId="deleteuser",
+    *    security={{"bearer_token":{}}},
+    *    @OA\Parameter(
+    *       name="userId",
+    *       in="path",
+    *       required=true,
+    *       @OA\Schema(
+    *         type="string"
+    *       )
+    *    ),
+    *    @OA\Response(
+    *      response=200,
+    *      description="Success",
+    *   ),
+    *   @OA\Response(
+    *       response=400,
+    *       description="Invalid request",
+    *   ),
+    *   @OA\Response(
+    *       response=404,
+    *       description="Not found",
+    *   ),
+    *   @OA\Response(
+    *      response=401,
+    *      description="Unauthorized",
+    *   ),
+    * )
+    */
     //for delete user 
     public function deleteUser($userId)
     {
@@ -176,6 +404,34 @@ class UserController extends Controller
             return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
+    //End
+
+    /**
+     * @OA\Get(
+     * path="/api/users",
+     * summary="User list",
+     * description="User list",
+     * operationId="User list",
+     * tags={"User"},
+     * security={{"bearer_token":{}}},
+     * @OA\Response(
+     *    response=200,
+     *    description="Success",
+     *  ),
+     *  @OA\Response(
+     *    response=400,
+     *    description="Invalid request",
+     *  ),
+     *  @OA\Response(
+     *    response=404,
+     *    description="Not found",
+     *  ),
+     *  @OA\Response(
+     *    response=401,
+     *    description="Unauthorized",
+     *  ),
+     * )
+     */
     //get all user
     public function getAllusers(){
         try {

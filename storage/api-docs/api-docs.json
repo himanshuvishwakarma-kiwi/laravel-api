@@ -1,0 +1,769 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Laravel api with jwt Auth Documentation",
+        "description": "Laravel api description",
+        "contact": {
+            "email": "admin@admin.com"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/forgot-password": {
+            "post": {
+                "tags": [
+                    "Reset Password"
+                ],
+                "summary": "Reset Password",
+                "description": "User Forget Password",
+                "operationId": "forgotpassword",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "email"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/api/reset-password/{token}": {
+            "post": {
+                "tags": [
+                    "Reset Password"
+                ],
+                "summary": "Reset Password",
+                "operationId": "resetpassword",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "password": {
+                                        "type": "password"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "password",
+                                        "format": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/api/posts": {
+            "get": {
+                "tags": [
+                    "Post"
+                ],
+                "summary": "Post list",
+                "description": "Get Post list",
+                "operationId": "Post list",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/posts/new-post": {
+            "post": {
+                "tags": [
+                    "Post"
+                ],
+                "summary": "create new post",
+                "description": "Create new post",
+                "operationId": "create post",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "description"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "description"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/posts/view-post/{postId}": {
+            "get": {
+                "tags": [
+                    "Post"
+                ],
+                "summary": "View post",
+                "operationId": "viewpost",
+                "parameters": [
+                    {
+                        "name": "postId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/posts/update-post/{postId}": {
+            "post": {
+                "tags": [
+                    "Post"
+                ],
+                "summary": "Update post",
+                "operationId": "updatepost",
+                "parameters": [
+                    {
+                        "name": "postId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "description"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "description"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/posts/remove-post/{postId}": {
+            "post": {
+                "tags": [
+                    "Post"
+                ],
+                "summary": "Delete post",
+                "operationId": "deletepost",
+                "parameters": [
+                    {
+                        "name": "postId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Sign Up",
+                "description": "User Register here",
+                "operationId": "Register",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "first_name",
+                                    "last_name",
+                                    "email",
+                                    "phone",
+                                    "password",
+                                    "confirm_password"
+                                ],
+                                "properties": {
+                                    "first_name": {
+                                        "type": "text"
+                                    },
+                                    "last_name": {
+                                        "type": "text"
+                                    },
+                                    "email": {
+                                        "type": "text"
+                                    },
+                                    "phone": {
+                                        "type": "text"
+                                    },
+                                    "password": {
+                                        "type": "password"
+                                    },
+                                    "confirm_password": {
+                                        "type": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "first_name",
+                                    "last_name",
+                                    "email",
+                                    "phone",
+                                    "password",
+                                    "confirm_password"
+                                ],
+                                "properties": {
+                                    "first_name": {
+                                        "type": "string"
+                                    },
+                                    "last_name": {
+                                        "type": "text"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "phone": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password"
+                                    },
+                                    "confirm_password": {
+                                        "type": "string",
+                                        "format": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Sign in",
+                "description": "Login by email, password",
+                "operationId": "Login",
+                "requestBody": {
+                    "description": "User credentials",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "himanshu@yopmail.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "12345678"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/api/profile": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get Profile",
+                "description": "User profile",
+                "operationId": "User Profile",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Logout",
+                "description": "User Logout",
+                "operationId": "User Logout",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/update-profile/{userId}": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Update profile",
+                "operationId": "updateprofile",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "first_name",
+                                    "last_name",
+                                    "phone"
+                                ],
+                                "properties": {
+                                    "first_name": {
+                                        "type": "text"
+                                    },
+                                    "last_name": {
+                                        "type": "text"
+                                    },
+                                    "phone": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "first_name",
+                                    "last_name",
+                                    "phone"
+                                ],
+                                "properties": {
+                                    "first_name": {
+                                        "type": "string"
+                                    },
+                                    "last_name": {
+                                        "type": "text"
+                                    },
+                                    "phone": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/delete/{userId}": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Delete user",
+                "operationId": "deleteuser",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/users": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "User list",
+                "description": "User list",
+                "operationId": "User list",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearer_token": {
+                "type": "apiKey",
+                "description": "Enter token in format (Bearer <token>)",
+                "name": "Authorization",
+                "in": "header"
+            }
+        }
+    }
+}

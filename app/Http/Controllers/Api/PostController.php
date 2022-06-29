@@ -18,6 +18,32 @@ class PostController extends Controller
     {
         $this->postRepository = $postRepository;
     }
+    /**
+     * @OA\Get(
+     * path="/api/posts",
+     * summary="Post list",
+     * description="Get Post list",
+     * operationId="Post list",
+     * tags={"Post"},
+     * security={{"bearer_token":{}}},
+     * @OA\Response(
+     *    response=200,
+     *    description="Success",
+     *  ),
+     *  @OA\Response(
+     *    response=400,
+     *    description="Invalid request",
+     *  ),
+     *  @OA\Response(
+     *    response=404,
+     *    description="Not found",
+     *  ),
+     *  @OA\Response(
+     *    response=401,
+     *    description="Unauthorized",
+     *  ),
+     * )
+     */
     //get all post
     public function index(){
         try {
@@ -31,13 +57,56 @@ class PostController extends Controller
             return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
+    //End
 
     /**
      
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-
+    /**
+     * @OA\Post(
+     *  path="/api/posts/new-post",
+     *  operationId="create post",
+     *  tags={"Post"},
+     *  security={{"bearer_token":{}}},
+     *  summary="create new post",
+     *  description="Create new post",
+     *  @OA\RequestBody(
+     *    @OA\JsonContent(
+     *       required={"title","description"},
+     *       @OA\Property(property="title", type="string"),
+     *       @OA\Property(property="description", type="text"),
+     *    ),
+     *    @OA\MediaType(
+     *       mediaType="multipart/form-data",
+     *       @OA\Schema(
+     *         type="object",
+     *         required={"title","description"},
+     *         @OA\Property(property="title", type="string"),
+     *         @OA\Property(property="description", type="text"),
+     *       ),
+     *    ),
+     *  ),
+     *  @OA\Response(
+     *    response=200,
+     *    description="Success",
+     *  ),
+     *  @OA\Response(
+     *    response=400,
+     *    description="Invalid request",
+     *  ),
+     *  @OA\Response(
+     *    response=404,
+     *    description="Not found",
+     *  ),
+     *  @OA\Response(
+     *    response=401,
+     *    description="Unauthorized",
+     *  ),
+     *)
+    */
+    //Create New post
     public function createPost(Request $request)
     {
         $input = $request->all();
@@ -62,6 +131,7 @@ class PostController extends Controller
             return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
+    //End
 
     /**
     * Display the specified post by id.
@@ -69,6 +139,40 @@ class PostController extends Controller
     * @param  int  $id
     * @return \Illuminate\Http\Response
     */
+    /**
+    * @OA\Get(
+    *   path="/api/posts/view-post/{postId}",
+    *   tags={"Post"},
+    *   summary="View post",
+    *   operationId="viewpost",
+    *   security={{"bearer_token":{}}},
+    *   @OA\Parameter(
+    *       name="postId",
+    *       in="path",
+    *       required=true,
+    *       @OA\Schema(
+    *         type="string"
+    *       )
+    *   ),
+    *   @OA\Response(
+    *      response=200,
+    *      description="Success",
+    *   ),
+    *   @OA\Response(
+    *       response=400,
+    *       description="Invalid request",
+    *   ),
+    *   @OA\Response(
+    *       response=404,
+    *       description="Not found",
+    *   ),
+    *   @OA\Response(
+    *      response=401,
+    *      description="Unauthorized",
+    *   ),
+    * )
+    */
+    // get post by id
     public function show($id)
     {
         $postData = $this->postRepository->getPostById($id);
@@ -85,12 +189,63 @@ class PostController extends Controller
             "data" => $postData
         ]);
     }
+    //End
+
     /**
     * Update the specified resource in storage.
     *
     * @param  \Illuminate\Http\Request  $request
     * @param  int  $id
     * @return \Illuminate\Http\Response
+    */
+    /**
+    * @OA\Post(
+    *   path="/api/posts/update-post/{postId}",
+    *   tags={"Post"},
+    *   summary="Update post",
+    *   operationId="updatepost",
+    *   security={{"bearer_token":{}}},
+    *   @OA\Parameter(
+    *       name="postId",
+    *       in="path",
+    *       required=true,
+    *       @OA\Schema(
+    *         type="string"
+    *       )
+    *   ),
+    *   @OA\RequestBody(
+    *      @OA\JsonContent(
+    *         required={"title","description"},
+    *         @OA\Property(property="title", type="string"),
+    *         @OA\Property(property="description", type="text"),
+    *      ),
+    *      @OA\MediaType(
+    *         mediaType="multipart/form-data",
+    *         @OA\Schema(
+    *            type="object",
+    *            required={"title","description"},
+    *            @OA\Property(property="title", type="string"),
+    *            @OA\Property(property="description", type="text"),
+    *         ),
+    *      ),
+    *   ),
+    *   @OA\Response(
+    *      response=200,
+    *      description="Success",
+    *   ),
+    *   @OA\Response(
+    *       response=400,
+    *       description="Invalid request",
+    *   ),
+    *   @OA\Response(
+    *       response=404,
+    *       description="Not found",
+    *   ),
+    *   @OA\Response(
+    *      response=401,
+    *      description="Unauthorized",
+    *   ),
+    * )
     */
     public function updatePost($postId, Request $request)
     {
@@ -114,7 +269,7 @@ class PostController extends Controller
             return response()->json(['error' => $validator->messages()], 200);
         }
         try {
-            $this->postRepository->updatePost($postId,$input);
+            $updata = $this->postRepository->updatePost($postId,$input);
             // Post created, return success response
             return response()->json([
                 'success' => true,
@@ -130,6 +285,40 @@ class PostController extends Controller
     * @param  int  $id
     * @return \Illuminate\Http\Response
     */
+    /**
+    * @OA\Post(
+    *   path="/api/posts/remove-post/{postId}",
+    *   tags={"Post"},
+    *   summary="Delete post",
+    *   operationId="deletepost",
+    *   security={{"bearer_token":{}}},
+    *   @OA\Parameter(
+    *       name="postId",
+    *       in="path",
+    *       required=true,
+    *       @OA\Schema(
+    *         type="string"
+    *       )
+    *   ),
+    *   @OA\Response(
+    *      response=200,
+    *      description="Success",
+    *   ),
+    *   @OA\Response(
+    *       response=400,
+    *       description="Invalid request",
+    *   ),
+    *   @OA\Response(
+    *       response=404,
+    *       description="Not found",
+    *   ),
+    *   @OA\Response(
+    *      response=401,
+    *      description="Unauthorized",
+    *   ),
+    * )
+    */
+    // delete post
     public function deletePost($postId)
     {
         try {
@@ -150,4 +339,5 @@ class PostController extends Controller
             return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
+    //End
 }

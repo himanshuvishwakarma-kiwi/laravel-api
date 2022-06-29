@@ -17,7 +17,45 @@ class ForgetPasswordController extends Controller
     {
         $this->userRepository = $userRepository;
     }
-    
+     /**
+    * @OA\Post(
+    *   path="/api/forgot-password",
+    *   operationId="forgotpassword",
+    *   tags={"Reset Password"},
+    *   summary="Reset Password",
+    *   description="User Forget Password",
+    *   @OA\RequestBody(
+    *      @OA\JsonContent(
+    *         required={"email"},
+    *         @OA\Property(property="email", type="string", format="email"),
+    *      ),
+    *      @OA\MediaType(
+    *         mediaType="multipart/form-data",
+    *         @OA\Schema(
+    *           type="object",
+    *           required={"email"},
+    *             @OA\Property(property="email", type="text"),
+    *         ),
+    *      ),
+    *   ),
+    *   @OA\Response(
+    *      response=200,
+    *      description="Success",
+    *   ),
+    *   @OA\Response(
+    *       response=400,
+    *       description="Invalid request",
+    *   ),
+    *   @OA\Response(
+    *       response=404,
+    *       description="Not found",
+    *   ),
+    *   @OA\Response(
+    *      response=401,
+    *      description="Unauthorized",
+    *   ),
+    * )
+    */
     // function for send password reset link
     public function sendPasswordResetLink(Request $request){
         $input = $request->only('email');
@@ -52,16 +90,66 @@ class ForgetPasswordController extends Controller
         ],Response::HTTP_OK );
         
     }
+    //End
+
+    /**
+    * @OA\Post(
+    *   path="/api/reset-password/{token}",
+    *   tags={"Reset Password"},
+    *   summary="Reset Password",
+    *   operationId="resetpassword",
+    *   @OA\Parameter(
+    *       name="token",
+    *       in="path",
+    *       required=true,
+    *       @OA\Schema(
+    *         type="string"
+    *       )
+    *   ),
+    *   @OA\RequestBody(
+    *       @OA\JsonContent(
+    *          required={"password","password_confirmation"},
+    *          @OA\Property(property="password", type="string", format="password"),
+    *          @OA\Property(property="password_confirmation", type="password", format="password"),
+    *       ),
+    *       @OA\MediaType(
+    *          mediaType="multipart/form-data",
+    *          @OA\Schema(
+    *              type="object",
+    *              required={"password", "password_confirmation"},
+    *              @OA\Property(property="password", type="password"),
+    *              @OA\Property(property="password_confirmation", type="password")
+    *          ),
+    *       ),
+    *   ),
+    *   @OA\Response(
+    *      response=200,
+    *      description="Success",
+    *   ),
+    *   @OA\Response(
+    *       response=400,
+    *       description="Invalid request",
+    *   ),
+    *   @OA\Response(
+    *       response=404,
+    *       description="Not found",
+    *   ),
+    *   @OA\Response(
+    *      response=401,
+    *      description="Unauthorized",
+    *   ),
+    * )
+    */
     // function reset password
     public function resetPassword(Request $request ,$token){
         $inputData = $request->only('password', 'password_confirmation');
         $validator = Validator::make($inputData, [
-            'password'=>'required|min:8',
-            'password_confirmation'=>'required|same:password'
+                'password'=>'required|min:8',
+                'password_confirmation'=>'required|same:password'
             ]
         );
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->messages()], 200);
+            return response()->json(['error' => $validator->messages()],  Response::HTTP_OK);
         }
         $passwordReset = PasswordReset::where('token', $request->token)->first();
         if ( ! $passwordReset ) {
@@ -82,4 +170,5 @@ class ForgetPasswordController extends Controller
             'message'=> trans('passwords.change')
         ],Response::HTTP_OK);
     }
+    //End
 }
