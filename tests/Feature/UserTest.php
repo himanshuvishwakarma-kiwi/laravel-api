@@ -51,7 +51,7 @@ class UserTest extends TestCase
                 ]
             ]);
     }
-    public function test_registration_successfull()
+    public function test_registration_successful()
     {
         $userData = [
             'first_name' => 'John',
