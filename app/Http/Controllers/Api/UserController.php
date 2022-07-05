@@ -80,7 +80,7 @@ class UserController extends Controller
         ]);
         //Send failed response if request is not valid
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->messages()], 200);
+            return response()->json(['success'=>false,'message' => $validator->messages()], 200);
         }
         $userDetails = $request->except(['password','confirm_password']);
         $userDetails['password'] = bcrypt($request->password);
@@ -91,7 +91,7 @@ class UserController extends Controller
                 'success' => true,
                 'message' => 'User created successfully.',
                 'data' => $user
-            ], Response::HTTP_OK);    
+            ], Response::HTTP_CREATED);    
         } catch (\Exception $e) {
             return response(['status' => 'error', 'message' => $e->getMessage()]);
         }
@@ -151,7 +151,7 @@ class UserController extends Controller
         ]);
         //Send failed response when request is not valid
         if($validator->fails()){
-            return response()->json(['error' => $validator->messages()], 200);
+            return response()->json(['success'=>false,'message' =>  $validator->messages()], 200);
         }
 
         //Create token        

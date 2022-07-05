@@ -63,7 +63,7 @@ class ForgetPasswordController extends Controller
             'email' => "required|email"
         ]);
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->messages()], 200);
+            return response()->json(['success'=>false,'message' => $validator->messages()], 200);
         }
         $user = $this->userRepository->getModel()->where( 'email', $request->email )->first();
         if (!$user ) {
@@ -149,7 +149,7 @@ class ForgetPasswordController extends Controller
             ]
         );
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->messages()],  Response::HTTP_OK);
+            return response()->json(['success'=>false,'message' => $validator->messages()],  Response::HTTP_OK);
         }
         $passwordReset = PasswordReset::where('token', $request->token)->first();
         if ( ! $passwordReset ) {
