@@ -322,7 +322,7 @@ class UserController extends Controller
         ]);
         //Send failed response when request is not valid
         if($validator->fails()){
-            return response()->json(['error' => $validator->messages()], 200);
+            return response()->json(['success' => false,'message' => $validator->messages()], 200);
         }
         $userData = $this->userRepository->getUserById($userId);
         if($userData){
