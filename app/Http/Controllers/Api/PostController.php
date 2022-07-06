@@ -118,7 +118,7 @@ class PostController extends Controller
 
         //Send failed response when request is not valid
         if($validator->fails()){
-            return response()->json(['error' => $validator->messages()], 200);
+            return response()->json(['success'=>false,'message' => $validator->messages()], 200);
         }
         try {
             $this->postRepository->createPost($input);
@@ -266,7 +266,7 @@ class PostController extends Controller
 
         //Send failed response when request is not valid
         if($validator->fails()){
-            return response()->json(['error' => $validator->messages()], 200);
+            return response()->json(['success'=>false,'message' =>$validator->messages()], 200);
         }
         try {
             $updata = $this->postRepository->updatePost($postId,$input);
