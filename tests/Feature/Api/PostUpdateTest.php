@@ -47,7 +47,7 @@ class PostUpdateTest extends TestCase
             'Authorization' => "Bearer {$this->token}",
         ]);
 
-        $response->assertStatus(Response::HTTP_OK)
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
         ->assertJsonStructure([
             "success",
             "message"

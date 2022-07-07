@@ -21,7 +21,7 @@ class LoginTest extends TestCase
 
         $response = $this->postJson('/api/login', $data);
 
-        $response->assertStatus(200)
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJson([
                 'success'=>false,
                 'message' => [

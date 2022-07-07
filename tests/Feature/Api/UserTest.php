@@ -18,7 +18,7 @@ class UserTest extends TestCase
     {
         $userData = [];
         $response = $this->json('POST', 'api/register', $userData,['Accept' => 'application/json']);
-        $response->assertStatus(200)
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJson([
                 "success" => false,
                 "message" => [
@@ -43,7 +43,7 @@ class UserTest extends TestCase
         ];
 
         $this->json('POST', 'api/register', $userData, ['Accept' => 'application/json'])
-            ->assertStatus(200)
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJson([
                 "success" => false,
                 "message" => [
@@ -80,7 +80,7 @@ class UserTest extends TestCase
             'confirm_password' => '123456789'
         ];
         $this->json('POST', 'api/register', $userData, ['Accept' => 'application/json'])
-            ->assertStatus(200)
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJson([
                 "success" => false,
                 "message" => [

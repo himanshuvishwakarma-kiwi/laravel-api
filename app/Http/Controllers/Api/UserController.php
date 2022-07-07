@@ -80,7 +80,7 @@ class UserController extends Controller
         ]);
         //Send failed response if request is not valid
         if ($validator->fails()) {
-            return response()->json(['success'=>false,'message' => $validator->messages()], 200);
+            return response()->json(['success'=>false,'message' => $validator->messages()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         $userDetails = $request->except(['password','confirm_password']);
         $userDetails['password'] = bcrypt($request->password);
@@ -151,7 +151,7 @@ class UserController extends Controller
         ]);
         //Send failed response when request is not valid
         if($validator->fails()){
-            return response()->json(['success'=>false,'message' =>  $validator->messages()], 200);
+            return response()->json(['success'=>false,'message' =>  $validator->messages()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         //Create token        
@@ -322,7 +322,7 @@ class UserController extends Controller
         ]);
         //Send failed response when request is not valid
         if($validator->fails()){
-            return response()->json(['success' => false,'message' => $validator->messages()], 200);
+            return response()->json(['success' => false,'message' => $validator->messages()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         $userData = $this->userRepository->getUserById($userId);
         if($userData){

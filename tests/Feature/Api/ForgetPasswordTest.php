@@ -34,7 +34,7 @@ class ForgetPasswordTest extends TestCase
 
         $response = $this->postJson('api/forgot-password', $data);
 
-        $response->assertStatus(Response::HTTP_OK)
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
         ->assertJsonStructure([
             "success",
             "message"

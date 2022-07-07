@@ -68,7 +68,7 @@ class ProfileTest extends TestCase
             'Accept' => 'application/json',
             'Authorization' => 'Bearer ' . $this->token,
         ]);
-        $response->assertStatus(200)
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJson([
                 "success" => false,
                 "message" => [

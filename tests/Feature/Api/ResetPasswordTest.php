@@ -36,7 +36,7 @@ class ResetPasswordTest extends TestCase
         $resetPwdToken = "wE23BC4FE2PTxzK9CbOmIhBLGbhg8DV0Vnc5FCKuNbkGWhPI8uWEVEKz6iK0ObiD";
         $response = $this->postJson('api/reset-password/'.$resetPwdToken, $data);
 
-        $response->assertStatus(Response::HTTP_OK)
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
         ->assertJsonStructure([
             "success",
             "message"
@@ -52,7 +52,7 @@ class ResetPasswordTest extends TestCase
         $resetPwdToken = "wE23BC4FE2PTxzK9CbOmIhBLGbhg8DV0Vnc5FCKuNbkGWhPI8uWEVEKz6iK0ObiD";
         $response = $this->postJson('api/reset-password/'.$resetPwdToken, $data);
 
-        $response->assertStatus(Response::HTTP_OK)
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
         ->assertJsonStructure([
             "success",
             "message"
